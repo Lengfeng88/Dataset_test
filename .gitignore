@@ -1,0 +1,137 @@
+# ============================================================
+# eon_pipeline — .gitignore
+# ============================================================
+ 
+# ── Python ──────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+MANIFEST
+ 
+# ── Virtual environments ────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.env/
+ 
+# ── Environment / secrets ───────────────────────────────────
+.env
+.env.*
+!.env.example
+*.secret
+secrets/
+ 
+# ── Model weights & checkpoints ─────────────────────────────
+weights/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+*.tflite
+*.pb
+# AdaFace / DINOv2 / CLIP cache
+.cache/
+huggingface_cache/
+torch_cache/
+ 
+# ── Video / media inputs ────────────────────────────────────
+data/raw/
+data/videos/
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.ts
+*.m2ts
+*.mxf
+ 
+# ── Pipeline outputs / datasets ─────────────────────────────
+data/crops/
+data/embeddings/
+data/clusters/
+data/dataset/
+data/export/
+data/pseudo_labels/
+*.h5
+*.hdf5
+*.parquet
+*.arrow
+*.feather
+ 
+# ── HITL / annotation queues ────────────────────────────────
+data/hitl_queue/
+data/review/
+data/gold_set/
+annotations/
+ 
+# ── Logs & monitoring ───────────────────────────────────────
+logs/
+*.log
+*.log.*
+monitoring/metrics/
+*.prom
+ 
+# ── Test artifacts ──────────────────────────────────────────
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.xml            # JUnit test reports
+ 
+# ── Type checking ───────────────────────────────────────────
+.mypy_cache/
+.dmypy.json
+dmypy.json
+ 
+# ── Linting / formatting ────────────────────────────────────
+.ruff_cache/
+ 
+# ── Jupyter ─────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+ 
+# ── OS ──────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+ 
+# ── IDEs ────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+ 
+# ── Docker ──────────────────────────────────────────────────
+docker-compose.override.yml
+ 
+# ── Temporary / scratch ─────────────────────────────────────
+tmp/
+temp/
+scratch/
+*.tmp
+*.bak
+*.orig
+ 
+libs/

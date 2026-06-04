@@ -1,0 +1,82 @@
+# ============================================================
+# eon_pipeline — requirements.txt
+# Python >= 3.10 recommended
+# ============================================================
+ 
+# ── Core ML / Vision ────────────────────────────────────────
+torch>=2.2.0+cu121
+torchvision>=0.17.0+cu121
+timm>=0.9.12                   # DINOv2 ViT-L/14 backbone
+ 
+# ── Detection ───────────────────────────────────────────────
+# Grounding DINO (install from source or pre-built wheel)
+# pip install git+https://github.com/IDEA-Research/GroundingDINO.git
+groundingdino-py>=0.4.0        # PyPI wrapper; use source if unavailable
+# retinaface-pytorch>=0.0.8   # conflicts with torch>=2.2; insightface includes RetinaFace
+ 
+# ── Tracking ────────────────────────────────────────────────
+# ByteTrack (install from source)
+# pip install git+https://github.com/ifzhang/ByteTrack.git
+lap>=0.4.0                     # ByteTrack dependency (linear assignment)
+cython>=3.0.0                  # ByteTrack Cython extensions
+ 
+# ── Embedding Models ────────────────────────────────────────
+# AdaFace — install from source:
+# pip install git+https://github.com/mk-minchul/AdaFace.git
+insightface>=0.7.3              # fallback face embedding / alignment utilities
+onnxruntime>=1.17.0             # for ONNX-exported AdaFace weights
+ 
+# ── Scene / Keyframe ────────────────────────────────────────
+# transnetv2>=0.1.0  # install from source: pip install git+https://github.com/soCzech/TransNetV2.git
+opencv-python>=4.9.0            # optical flow (Farneback), crop, resize
+ffmpeg-python>=0.2.0            # video decode wrapper
+ 
+# ── CLIP / Zero-shot Labeling ───────────────────────────────
+open-clip-torch>=2.24.0         # CLIP + SiGLIP zero-shot labeling
+ 
+# ── Clustering ──────────────────────────────────────────────
+leidenalg>=0.10.2               # Leiden graph community detection
+python-igraph>=0.11.6           # required by leidenalg
+scikit-learn>=1.4.0             # cosine_similarity, nearest-neighbor graph utils
+faiss-cpu>=1.8.0                # ANN search for similarity graph construction
+# faiss-gpu>=1.8.0              # swap in for GPU-accelerated ANN (optional)
+ 
+# ── Data / Persistence ──────────────────────────────────────
+numpy>=1.26.0
+pandas>=2.2.0
+Pillow>=10.3.0
+h5py>=3.11.0                   # embedding storage
+pyarrow>=15.0.0                 # Parquet dataset export
+ 
+# ── API / Serving ───────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+ 
+# ── Super-resolution (AdaFace pre-pass) ─────────────────────
+# Real-ESRGAN for < 32×32 face upscaling
+basicsr>=1.4.2
+realesrgan>=0.3.0
+ 
+# ── Monitoring & Observability ──────────────────────────────
+prometheus-client>=0.20.0
+structlog>=24.1.0
+rich>=13.7.0                   # pretty console output
+ 
+# ── Continual Learning Utilities ────────────────────────────
+# EWC / replay helpers (lightweight; no heavy framework required)
+higher>=0.2.1                  # functional model API for meta / fine-tune loops
+ 
+# ── Testing ─────────────────────────────────────────────────
+pytest>=8.1.0
+pytest-cov>=5.0.0
+pytest-mock>=3.14.0
+pytest-asyncio>=0.23.0
+ 
+# ── Dev / Tooling ───────────────────────────────────────────
+black>=24.4.0
+isort>=5.13.0
+mypy>=1.10.0
+ruff>=0.4.0
+pre-commit>=3.7.0
+ 
