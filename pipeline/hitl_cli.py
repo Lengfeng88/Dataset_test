@@ -45,21 +45,17 @@ def _show_cluster_frames(cluster, max_frames: int = 3):
                 cap.release()
                 if not ret:
                     continue
-                # 完整帧 + 红框标注（坐标随缩放比例调整）
+                # 不裁剪，显示完整帧并画红框
+                cv2.rectangle(frame, (int(bbox.x1), int(bbox.y1)),
+                                      (int(bbox.x2), int(bbox.y2)),
+                                      (0, 0, 255), 2)
+                # 放大整帧到 720p 方便查看
                 scale = 720 / frame.shape[0]
                 frame_resized = cv2.resize(frame, None, fx=scale, fy=scale)
-                x1r = int(bbox.x1 * scale)
-                y1r = int(bbox.y1 * scale)
-                x2r = int(bbox.x2 * scale)
-                y2r = int(bbox.y2 * scale)
-                cv2.rectangle(frame_resized, (x1r, y1r), (x2r, y2r), (0, 0, 255), 3)
-                label_text = cluster.clip_label or "?"
-                cv2.putText(frame_resized, label_text, (x1r, max(y1r - 8, 20)),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
                 # 保存到临时文件
                 tmp = tempfile.NamedTemporaryFile(suffix=f"_f{frame_idx}.jpg",
                                                   delete=False)
-                cv2.imwrite(tmp.name, frame_resized)
+                cv2.imwrite(tmp.name, crop_img)
                 # 用 eog 弹窗（非阻塞）
                 p = subprocess.Popen(["eog", tmp.name],
                                      stdout=subprocess.DEVNULL,
@@ -94,18 +90,6 @@ def cli_hitl_review(queue: HITLQueue, funnel: ConfidenceFunnelPhase) -> List[Dat
 
     confirmed_records: List[DatasetRecord] = []
     skipped = 0
-
-    # ── 批量自动确认高置信度 cluster ─────────────────────────────
-    auto_confirmed = 0
-    for cluster in pending:
-        if cluster.clip_score >= 0.75 and cluster.clip_label:
-            queue.confirm(cluster.cluster_id, cluster.clip_label, reviewed_by="auto_high_conf")
-            records = funnel._emit_records(cluster, "hitl_confirmed")
-            confirmed_records.extend(records)
-            auto_confirmed += 1
-    console.print(f"[green]⚡ 自动确认 {auto_confirmed} 个高置信度 cluster (score ≥ 0.75)[/green]")
-    pending = [c for c in pending if c.clip_score < 0.75 or not c.clip_label]
-    console.print(f"[yellow]{len(pending)} 个低置信度 cluster 需要人工审核[/yellow]\n")
 
     for i, cluster in enumerate(pending, 1):
         # ── Header ────────────────────────────────────────────────────
